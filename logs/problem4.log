@@ -1,0 +1,79 @@
+2026-02-08 12:10:16,062 | ========== Problem 4 ==========
+2026-02-08 12:10:16,062 | Grid size: 5x5
+2026-02-08 12:10:16,062 | Goal state: (4, 4) (terminal)
+2026-02-08 12:10:16,062 | Grey states: [(0, 4), (2, 2), (3, 0)]
+2026-02-08 12:10:16,062 | Rewards: +10 at GOAL, -5 at GREY, -1 otherwise
+2026-02-08 12:10:16,062 | Behavior policy b(a|s): uniform random over {R,D,L,U} -> b=0.25 each
+2026-02-08 12:10:16,062 | Target policy pi(a|s): greedy wrt Q (deterministic)
+2026-02-08 12:10:16,062 | Importance Sampling: Weighted IS (lower variance than ordinary IS)
+2026-02-08 12:10:16,062 | Parameters: gamma=0.95, episodes=50000, max_steps=200, seed=0
+2026-02-08 12:10:16,063 | ------------------------------------------------------
+2026-02-08 12:10:16,271 | [MC-WIS] ep=001000 avg_len=94.79 recent_maxW=16384.00
+2026-02-08 12:10:16,371 | [MC-WIS] ep=002000 avg_len=97.31 recent_maxW=262144.00
+2026-02-08 12:10:16,478 | [MC-WIS] ep=003000 avg_len=97.38 recent_maxW=4096.00
+2026-02-08 12:10:16,591 | [MC-WIS] ep=004000 avg_len=94.09 recent_maxW=16384.00
+2026-02-08 12:10:16,709 | [MC-WIS] ep=005000 avg_len=94.42 recent_maxW=4096.00
+2026-02-08 12:10:16,811 | [MC-WIS] ep=006000 avg_len=95.62 recent_maxW=16384.00
+2026-02-08 12:10:16,911 | [MC-WIS] ep=007000 avg_len=98.95 recent_maxW=4096.00
+2026-02-08 12:10:17,014 | [MC-WIS] ep=008000 avg_len=92.30 recent_maxW=16384.00
+2026-02-08 12:10:17,107 | [MC-WIS] ep=009000 avg_len=94.03 recent_maxW=4096.00
+2026-02-08 12:10:17,213 | [MC-WIS] ep=010000 avg_len=99.16 recent_maxW=16384.00
+2026-02-08 12:10:17,310 | [MC-WIS] ep=011000 avg_len=94.82 recent_maxW=16384.00
+2026-02-08 12:10:17,405 | [MC-WIS] ep=012000 avg_len=92.61 recent_maxW=16384.00
+2026-02-08 12:10:17,507 | [MC-WIS] ep=013000 avg_len=95.44 recent_maxW=65536.00
+2026-02-08 12:10:17,605 | [MC-WIS] ep=014000 avg_len=96.47 recent_maxW=4096.00
+2026-02-08 12:10:17,697 | [MC-WIS] ep=015000 avg_len=93.62 recent_maxW=4096.00
+2026-02-08 12:10:17,795 | [MC-WIS] ep=016000 avg_len=97.77 recent_maxW=4096.00
+2026-02-08 12:10:17,894 | [MC-WIS] ep=017000 avg_len=97.43 recent_maxW=4096.00
+2026-02-08 12:10:17,996 | [MC-WIS] ep=018000 avg_len=93.36 recent_maxW=4096.00
+2026-02-08 12:10:18,098 | [MC-WIS] ep=019000 avg_len=94.81 recent_maxW=4096.00
+2026-02-08 12:10:18,203 | [MC-WIS] ep=020000 avg_len=97.52 recent_maxW=4096.00
+2026-02-08 12:10:18,303 | [MC-WIS] ep=021000 avg_len=95.27 recent_maxW=4096.00
+2026-02-08 12:10:18,396 | [MC-WIS] ep=022000 avg_len=94.18 recent_maxW=4096.00
+2026-02-08 12:10:18,492 | [MC-WIS] ep=023000 avg_len=94.62 recent_maxW=16384.00
+2026-02-08 12:10:18,588 | [MC-WIS] ep=024000 avg_len=93.83 recent_maxW=16384.00
+2026-02-08 12:10:18,689 | [MC-WIS] ep=025000 avg_len=95.10 recent_maxW=16384.00
+2026-02-08 12:10:18,789 | [MC-WIS] ep=026000 avg_len=94.09 recent_maxW=4096.00
+2026-02-08 12:10:18,891 | [MC-WIS] ep=027000 avg_len=98.87 recent_maxW=4096.00
+2026-02-08 12:10:18,994 | [MC-WIS] ep=028000 avg_len=89.93 recent_maxW=16384.00
+2026-02-08 12:10:19,106 | [MC-WIS] ep=029000 avg_len=95.25 recent_maxW=4096.00
+2026-02-08 12:10:19,230 | [MC-WIS] ep=030000 avg_len=95.05 recent_maxW=16384.00
+2026-02-08 12:10:19,343 | [MC-WIS] ep=031000 avg_len=96.61 recent_maxW=4096.00
+2026-02-08 12:10:19,439 | [MC-WIS] ep=032000 avg_len=94.47 recent_maxW=16384.00
+2026-02-08 12:10:19,540 | [MC-WIS] ep=033000 avg_len=93.71 recent_maxW=65536.00
+2026-02-08 12:10:19,640 | [MC-WIS] ep=034000 avg_len=97.89 recent_maxW=4096.00
+2026-02-08 12:10:19,740 | [MC-WIS] ep=035000 avg_len=97.09 recent_maxW=4096.00
+2026-02-08 12:10:19,832 | [MC-WIS] ep=036000 avg_len=94.15 recent_maxW=4096.00
+2026-02-08 12:10:19,924 | [MC-WIS] ep=037000 avg_len=92.94 recent_maxW=1024.00
+2026-02-08 12:10:20,022 | [MC-WIS] ep=038000 avg_len=92.88 recent_maxW=4096.00
+2026-02-08 12:10:20,116 | [MC-WIS] ep=039000 avg_len=95.29 recent_maxW=16384.00
+2026-02-08 12:10:20,214 | [MC-WIS] ep=040000 avg_len=94.68 recent_maxW=4096.00
+2026-02-08 12:10:20,314 | [MC-WIS] ep=041000 avg_len=93.23 recent_maxW=262144.00
+2026-02-08 12:10:20,408 | [MC-WIS] ep=042000 avg_len=96.42 recent_maxW=4096.00
+2026-02-08 12:10:20,508 | [MC-WIS] ep=043000 avg_len=98.57 recent_maxW=4096.00
+2026-02-08 12:10:20,627 | [MC-WIS] ep=044000 avg_len=96.77 recent_maxW=16384.00
+2026-02-08 12:10:20,736 | [MC-WIS] ep=045000 avg_len=95.63 recent_maxW=4096.00
+2026-02-08 12:10:20,835 | [MC-WIS] ep=046000 avg_len=95.19 recent_maxW=65536.00
+2026-02-08 12:10:20,933 | [MC-WIS] ep=047000 avg_len=99.60 recent_maxW=4096.00
+2026-02-08 12:10:21,042 | [MC-WIS] ep=048000 avg_len=93.97 recent_maxW=4096.00
+2026-02-08 12:10:21,138 | [MC-WIS] ep=049000 avg_len=94.14 recent_maxW=16384.00
+2026-02-08 12:10:21,230 | [MC-WIS] ep=050000 avg_len=92.84 recent_maxW=16384.00
+2026-02-08 12:10:21,230 | ----- Final Results (MC Estimate) -----
+2026-02-08 12:10:21,230 | Time=5.146738 sec
+2026-02-08 12:10:21,231 | V_MC (rounded to 3):
+[[-0.102  0.938  2.025  3.172  0.403]
+ [ 0.896  2.012  3.181  4.401  5.693]
+ [ 1.857  3.155  0.414  5.696  7.05 ]
+ [-0.816  4.394  5.69   7.052  8.486]
+ [ 4.166  5.673  7.046  8.49  10.   ]]
+2026-02-08 12:10:21,231 | pi_MC:
+[['D' 'R' 'D' 'D' 'D']
+ ['D' 'R' 'R' 'D' 'D']
+ ['R' 'D' 'R' 'D' 'D']
+ ['R' 'R' 'R' 'D' 'D']
+ ['R' 'R' 'R' 'R' 'T']]
+2026-02-08 12:10:21,231 | ----- Comparison: MC vs Value Iteration -----
+2026-02-08 12:10:21,231 | VI time=0.000000 sec
+2026-02-08 12:10:21,231 | MAE(|V_MC - V*|) = 0.045186
+2026-02-08 12:10:21,231 | Max(|V_MC - V*|) = 0.269031
+2026-02-08 12:10:21,231 | ======================================================
