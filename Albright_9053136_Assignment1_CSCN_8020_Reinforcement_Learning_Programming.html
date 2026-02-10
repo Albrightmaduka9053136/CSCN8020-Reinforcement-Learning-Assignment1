@@ -7332,7 +7332,12 @@ a.anchor-link {
     if (!diagrams.length) {
       return;
     }
-    const mermaid = (await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.esm.min.mjs")).default;
+    const mermaid = (await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.0/mermaid.esm.min.mjs")).default;
+    const elkUrl = "https://cdnjs.cloudflare.com/ajax/libs/mermaid-layout-elk/0.1.9/mermaid-layout-elk.esm.min.mjs";
+    if(elkUrl) {
+      const elkLayouts = (await import(elkUrl)).default;
+      mermaid.registerLayoutLoaders(elkLayouts);
+    }
     const parser = new DOMParser();
 
     mermaid.initialize({
@@ -7429,7 +7434,8 @@ a.anchor-link {
      * Post-process to ensure mermaid diagrams contain only valid SVG and XHTML.
      */
     function cleanMermaidSvg(svg) {
-      return svg.replace(RE_VOID_ELEMENT, replaceVoidElement);
+      svg = svg.replace(RE_VOID_ELEMENT, replaceVoidElement);
+      return `${SVG_XML_HEADER}${svg}`;
     }
 
 
@@ -7455,6 +7461,285 @@ a.anchor-link {
       }
       return `<${tag} ${rest}>`;
     }
+
+
+  /**
+   * Named HTML entities with their decimal equivalent codes.
+   *
+   * @see https://www.w3.org/TR/WD-html40-970708/sgml/entities.html
+   * */
+  const HTML_ENTITIES = `<!ENTITY Aacute "&#193;">
+<!ENTITY aacute "&#225;">
+<!ENTITY Acirc "&#194;">
+<!ENTITY acirc "&#226;">
+<!ENTITY acute "&#180;">
+<!ENTITY AElig "&#198;">
+<!ENTITY aelig "&#230;">
+<!ENTITY Agrave "&#192;">
+<!ENTITY agrave "&#224;">
+<!ENTITY alefsym "&#8501;">
+<!ENTITY Alpha "&#913;">
+<!ENTITY alpha "&#945;">
+<!ENTITY amp "&#38;">
+<!ENTITY and "&#8869;">
+<!ENTITY ang "&#8736;">
+<!ENTITY Aring "&#197;">
+<!ENTITY aring "&#229;">
+<!ENTITY asymp "&#8776;">
+<!ENTITY Atilde "&#195;">
+<!ENTITY atilde "&#227;">
+<!ENTITY Auml "&#196;">
+<!ENTITY auml "&#228;">
+<!ENTITY bdquo "&#8222;">
+<!ENTITY Beta "&#914;">
+<!ENTITY beta "&#946;">
+<!ENTITY brvbar "&#166;">
+<!ENTITY bull "&#8226;">
+<!ENTITY cap "&#8745;">
+<!ENTITY Ccedil "&#199;">
+<!ENTITY ccedil "&#231;">
+<!ENTITY cedil "&#184;">
+<!ENTITY cent "&#162;">
+<!ENTITY Chi "&#935;">
+<!ENTITY chi "&#967;">
+<!ENTITY circ "&#710;">
+<!ENTITY clubs "&#9827;">
+<!ENTITY cong "&#8773;">
+<!ENTITY copy "&#169;">
+<!ENTITY crarr "&#8629;">
+<!ENTITY cup "&#8746;">
+<!ENTITY curren "&#164;">
+<!ENTITY dagger "&#8224;">
+<!ENTITY Dagger "&#8225;">
+<!ENTITY darr "&#8595;">
+<!ENTITY dArr "&#8659;">
+<!ENTITY deg "&#176;">
+<!ENTITY Delta "&#916;">
+<!ENTITY delta "&#948;">
+<!ENTITY diams "&#9830;">
+<!ENTITY divide "&#247;">
+<!ENTITY Eacute "&#201;">
+<!ENTITY eacute "&#233;">
+<!ENTITY Ecirc "&#202;">
+<!ENTITY ecirc "&#234;">
+<!ENTITY Egrave "&#200;">
+<!ENTITY egrave "&#232;">
+<!ENTITY empty "&#8709;">
+<!ENTITY emsp "&#8195;">
+<!ENTITY ensp "&#8194;">
+<!ENTITY epsilon "&#949;">
+<!ENTITY Epsilon "&#917;">
+<!ENTITY equiv "&#8801;">
+<!ENTITY Eta "&#919;">
+<!ENTITY eta "&#951;">
+<!ENTITY ETH "&#208;">
+<!ENTITY eth "&#240;">
+<!ENTITY Euml "&#203;">
+<!ENTITY euml "&#235;">
+<!ENTITY exist "&#8707;">
+<!ENTITY fnof "&#402;">
+<!ENTITY forall "&#8704;">
+<!ENTITY frac12 "&#189;">
+<!ENTITY frac14 "&#188;">
+<!ENTITY frac34 "&#190;">
+<!ENTITY frasl "&#8260;">
+<!ENTITY Gamma "&#915;">
+<!ENTITY gamma "&#947;">
+<!ENTITY ge "&#8805;">
+<!ENTITY gt "&#62;">
+<!ENTITY harr "&#8596;">
+<!ENTITY hArr "&#8660;">
+<!ENTITY hearts "&#9829;">
+<!ENTITY hellip "&#8230;">
+<!ENTITY Iacute "&#205;">
+<!ENTITY iacute "&#237;">
+<!ENTITY Icirc "&#206;">
+<!ENTITY icirc "&#238;">
+<!ENTITY iexcl "&#161;">
+<!ENTITY Igrave "&#204;">
+<!ENTITY igrave "&#236;">
+<!ENTITY image "&#8465;">
+<!ENTITY infin "&#8734;">
+<!ENTITY int "&#8747;">
+<!ENTITY Iota "&#921;">
+<!ENTITY iota "&#953;">
+<!ENTITY iquest "&#191;">
+<!ENTITY isin "&#8712;">
+<!ENTITY Iuml "&#207;">
+<!ENTITY iuml "&#239;">
+<!ENTITY Kappa "&#922;">
+<!ENTITY kappa "&#954;">
+<!ENTITY Lambda "&#923;">
+<!ENTITY lambda "&#955;">
+<!ENTITY lang "&#9001;">
+<!ENTITY laquo "&#171;">
+<!ENTITY larr "&#8592;">
+<!ENTITY lArr "&#8656;">
+<!ENTITY lceil "&#8968;">
+<!ENTITY ldquo "&#8220;">
+<!ENTITY le "&#8804;">
+<!ENTITY lfloor "&#8970;">
+<!ENTITY lowast "&#8727;">
+<!ENTITY loz "&#9674;">
+<!ENTITY lrm "&#8206;">
+<!ENTITY lsaquo "&#8249;">
+<!ENTITY lsquo "&#8216;">
+<!ENTITY lt "&#60;">
+<!ENTITY macr "&#175;">
+<!ENTITY mdash "&#8212;">
+<!ENTITY micro "&#181;">
+<!ENTITY middot "&#183;">
+<!ENTITY minus "&#8722;">
+<!ENTITY Mu "&#924;">
+<!ENTITY mu "&#956;">
+<!ENTITY nabla "&#8711;">
+<!ENTITY nbsp "&#160;">
+<!ENTITY ndash "&#8211;">
+<!ENTITY ne "&#8800;">
+<!ENTITY ni "&#8715;">
+<!ENTITY not "&#172;">
+<!ENTITY notin "&#8713;">
+<!ENTITY nsub "&#8836;">
+<!ENTITY Ntilde "&#209;">
+<!ENTITY ntilde "&#241;">
+<!ENTITY Nu "&#925;">
+<!ENTITY nu "&#957;">
+<!ENTITY Oacute "&#211;">
+<!ENTITY oacute "&#243;">
+<!ENTITY Ocirc "&#212;">
+<!ENTITY ocirc "&#244;">
+<!ENTITY OElig "&#338;">
+<!ENTITY oelig "&#339;">
+<!ENTITY Ograve "&#210;">
+<!ENTITY ograve "&#242;">
+<!ENTITY oline "&#8254;">
+<!ENTITY Omega "&#937;">
+<!ENTITY omega "&#969;">
+<!ENTITY Omicron "&#927;">
+<!ENTITY omicron "&#959;">
+<!ENTITY oplus "&#8853;">
+<!ENTITY or "&#8870;">
+<!ENTITY ordf "&#170;">
+<!ENTITY ordm "&#186;">
+<!ENTITY Oslash "&#216;">
+<!ENTITY oslash "&#248;">
+<!ENTITY Otilde "&#213;">
+<!ENTITY otilde "&#245;">
+<!ENTITY otimes "&#8855;">
+<!ENTITY Ouml "&#214;">
+<!ENTITY ouml "&#246;">
+<!ENTITY para "&#182;">
+<!ENTITY part "&#8706;">
+<!ENTITY permil "&#8240;">
+<!ENTITY perp "&#8869;">
+<!ENTITY Phi "&#934;">
+<!ENTITY phi "&#966;">
+<!ENTITY Pi "&#928;">
+<!ENTITY pi "&#960;">
+<!ENTITY piv "&#982;">
+<!ENTITY plusmn "&#177;">
+<!ENTITY pound "&#163;">
+<!ENTITY prime "&#8242;">
+<!ENTITY Prime "&#8243;">
+<!ENTITY prod "&#8719;">
+<!ENTITY prop "&#8733;">
+<!ENTITY Psi "&#936;">
+<!ENTITY psi "&#968;">
+<!ENTITY quot "&#34;">
+<!ENTITY radic "&#8730;">
+<!ENTITY rang "&#9002;">
+<!ENTITY raquo "&#187;">
+<!ENTITY rarr "&#8594;">
+<!ENTITY rArr "&#8658;">
+<!ENTITY rceil "&#8969;">
+<!ENTITY rdquo "&#8221;">
+<!ENTITY real "&#8476;">
+<!ENTITY reg "&#174;">
+<!ENTITY rfloor "&#8971;">
+<!ENTITY Rho "&#929;">
+<!ENTITY rho "&#961;">
+<!ENTITY rlm "&#8207;">
+<!ENTITY rsaquo "&#8250;">
+<!ENTITY rsquo "&#8217;">
+<!ENTITY sbquo "&#8218;">
+<!ENTITY Scaron "&#352;">
+<!ENTITY scaron "&#353;">
+<!ENTITY sdot "&#8901;">
+<!ENTITY sect "&#167;">
+<!ENTITY shy "&#173;">
+<!ENTITY Sigma "&#931;">
+<!ENTITY sigma "&#963;">
+<!ENTITY sigmaf "&#962;">
+<!ENTITY sim "&#8764;">
+<!ENTITY spades "&#9824;">
+<!ENTITY sub "&#8834;">
+<!ENTITY sube "&#8838;">
+<!ENTITY sum "&#8721;">
+<!ENTITY sup "&#8835;">
+<!ENTITY sup1 "&#185;">
+<!ENTITY sup2 "&#178;">
+<!ENTITY sup3 "&#179;">
+<!ENTITY supe "&#8839;">
+<!ENTITY szlig "&#223;">
+<!ENTITY Tau "&#932;">
+<!ENTITY tau "&#964;">
+<!ENTITY there4 "&#8756;">
+<!ENTITY Theta "&#920;">
+<!ENTITY theta "&#952;">
+<!ENTITY thetasym "&#977;">
+<!ENTITY thinsp "&#8201;">
+<!ENTITY THORN "&#222;">
+<!ENTITY thorn "&#254;">
+<!ENTITY tilde "&#732;">
+<!ENTITY times "&#215;">
+<!ENTITY trade "&#8482;">
+<!ENTITY Uacute "&#218;">
+<!ENTITY uacute "&#250;">
+<!ENTITY uarr "&#8593;">
+<!ENTITY uArr "&#8657;">
+<!ENTITY Ucirc "&#219;">
+<!ENTITY ucirc "&#251;">
+<!ENTITY Ugrave "&#217;">
+<!ENTITY ugrave "&#249;">
+<!ENTITY uml "&#168;">
+<!ENTITY upsih "&#978;">
+<!ENTITY Upsilon "&#933;">
+<!ENTITY upsilon "&#965;">
+<!ENTITY Uuml "&#220;">
+<!ENTITY uuml "&#252;">
+<!ENTITY weierp "&#8472;">
+<!ENTITY Xi "&#926;">
+<!ENTITY xi "&#958;">
+<!ENTITY Yacute "&#221;">
+<!ENTITY yacute "&#253;">
+<!ENTITY yen "&#165;">
+<!ENTITY Yuml "&#376;">
+<!ENTITY yuml "&#255;">
+<!ENTITY Zeta "&#918;">
+<!ENTITY zeta "&#950;">
+<!ENTITY zwj "&#8205;">
+<!ENTITY zwnj "&#8204;">`.replace(/\n/g, ' ');
+
+  /**
+   * A reasonably strict xml declaration.
+   */
+  const XML_DECL = '<?xml version="1.0" standalone="no"?>';
+
+  /**
+   * The beginning of the XML doctype declaration.
+   */
+  const DOCTYPE_START = `<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [`;
+
+  /**
+   * The end of the XML docype declaration.
+   */
+  const DOCTYPE_END = ']>';
+
+  /**
+   * A full header for an SVG XML document.
+   */
+  const SVG_XML_HEADER = `${XML_DECL}
+    ${DOCTYPE_START}${HTML_ENTITIES}${DOCTYPE_END}`;
 
     void Promise.all([...diagrams].map(renderOneMarmaid));
   });
@@ -7551,49 +7836,19 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Problem-1:-Pick-and-Place-Robot-as-an-MDP">Problem 1: Pick-and-Place Robot as an MDP<a class="anchor-link" href="#Problem-1:-Pick-and-Place-Robot-as-an-MDP">¶</a></h2><p>We model the task as a Markov Decision Process (MDP):
-(MDP) = (S, A, P, R, γ), where γ = 0.95 is the discount factor.</p>
-<h3 id="State-(S)">State (S)<a class="anchor-link" href="#State-(S)">¶</a></h3><p>To satisfy the Markov property and allow smooth control, the state includes:
-s_t = (θ_t, θ̇_t, x^ee_t, ẋ^ee_t, g_t, x^obj_t, x^target_t)</p>
-<p>Where:</p>
-<ul>
-<li>θ_t: joint angles</li>
-<li>θ̇_t: joint velocities (needed for smooth motion)</li>
-<li>x^ee_t, ẋ^ee_t: end-effector pose and velocity</li>
-<li>g_t: gripper state (holding object or not)</li>
-<li>x^obj_t: object pose</li>
-<li>x^target_t: target pose</li>
-</ul>
-<p>This state is Markov because it contains all information needed to predict future states.</p>
-<h3 id="Action--(A)">Action  (A)<a class="anchor-link" href="#Action--(A)">¶</a></h3><p>The agent controls the robot motors directly. A natural choice is:
-a_t = τ_t ∈ R^n
-where τ_t are joint torques (one per joint).
-Alternatives include motor voltages or desired joint velocities.</p>
-<h3 id="Transition-Model-P(s'-%7C-s,-a)">Transition Model P(s' | s, a)<a class="anchor-link" href="#Transition-Model-P(s'-%7C-s,-a)">¶</a></h3><p>The transition is given by robot dynamics:
-s_{t+1} = f(s_t, a_t) + ε
-where ε represents noise, friction, and modeling errors.
-Collisions, joint limits, or contacts may clamp the next state or terminate the episode.</p>
-<h3 id="Reward-Function-R(s,-a,-s')">Reward Function R(s, a, s')<a class="anchor-link" href="#Reward-Function-R(s,-a,-s')">¶</a></h3><p>We want fast, smooth, safe, and successful execution:
-R_t =
-+100 if the object is placed correctly
-+20  if a successful grasp is achieved
--λ1 ||τ_t||^2            (penalize large torques)
--λ2 ||τ_t - τ_{t-1}||^2  (penalize jerky motions)
--λ3 Δt                   (penalize time to encourage speed)
--200 if collision or object drop occurs</p>
-<p>This reward encourages:</p>
-<ul>
-<li>Correct task completion</li>
-<li>Smooth and energy-efficient motion</li>
-<li>Safety (avoid collisions)</li>
-<li>Speed (finish quickly)</li>
-</ul>
-<h3 id="Termination">Termination<a class="anchor-link" href="#Termination">¶</a></h3><p>An episode terminates when:</p>
-<ul>
-<li>The object is placed successfully, or</li>
-<li>A collision, or</li>
-<li>A time limit is reached.</li>
-</ul>
+<h2 id="Problem-1:-Pick-and-Place-Robot-as-an-MDP">Problem 1: Pick-and-Place Robot as an MDP<a class="anchor-link" href="#Problem-1:-Pick-and-Place-Robot-as-an-MDP">¶</a></h2><p>We model the pick-and-place robot control problem as a Markov Decision Process (MDP) defined by the tuple ( (S, A, P, R, \gamma) ).</p>
+<p><strong>State space (S):</strong><br/>
+The state describes the robot and task configuration, including joint positions and velocities, the end-effector position, the gripper state (open/closed), and the object position.</p>
+<p><strong>Action space (A):</strong><br/>
+Actions are low-level motor commands, such as joint torque or joint velocity commands, that move the robot.</p>
+<p><strong>Transition model (P):</strong><br/>
+Given the current state and an action, the next state is determined by the robot’s dynamics. If noise is present, transitions can be stochastic, but they depend only on the current state and action, satisfying the Markov property.</p>
+<p><strong>Reward function (R):</strong><br/>
+The agent receives a large positive reward for successfully placing the object at the target location. A small negative reward is given at each time step to encourage faster completion. Additional penalties are applied for collisions, dropping the object, or unsafe/jerky movements. This encourages fast, smooth, and safe motions.</p>
+<p><strong>Discount factor ((gamma)):</strong><br/>
+A discount factor ( gamma in (0,1) ) is used to balance short-term efficiency and long-term task success.</p>
+<p><strong>Justification:</strong><br/>
+This MDP formulation allows the agent to learn motor-level control policies that trade off speed, smoothness, and task success using only the current robot and task state.</p>
 </div>
 </div>
 </div>
@@ -7605,71 +7860,153 @@ R_t =
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="Problem-2:-2%C3%972-Gridworld">Problem 2: 2×2 Gridworld<a class="anchor-link" href="#Problem-2:-2%C3%972-Gridworld">¶</a></h2><p>I have four states arranged as:</p>
-<p>s1  s2
+<p>s1  s2<br/>
 s3  s4</p>
-<p>Rewards:
-R(s1) = 5, R(s2) = 10, R(s3) = 1, R(s4) = 2
-Discount factor: γ = 0.95</p>
+<p>Rewards:<br/>
+R(s1) = 5, R(s2) = 10, R(s3) = 1, R(s4) = 2</p>
+<p>Discount factor: ( \gamma = 0.95 )</p>
 <p>Transitions are deterministic. Invalid moves keep the agent in the same state.</p>
-<p>Although Problem 2 refers to Value Iteration, it also mentions policy evaluation and policy improvement. Therefore, both approaches are presented here for completeness.</p>
+<p>Initial policy: for all states, ( \pi_0(\text{up}\mid s)=1 ).</p>
 <hr/>
-<h3 id="A)-Two-Sweeps-of-Value-Iteration">A) Two Sweeps of Value Iteration<a class="anchor-link" href="#A)-Two-Sweeps-of-Value-Iteration">¶</a></h3><p>Bellman optimality update:
-V_{k+1}(s) = R(s) + γ * max_a V_k(s')</p>
-<p>Initialize:
-V0(s) = 0 for all s</p>
-<h4 id="Sweep-1">Sweep 1<a class="anchor-link" href="#Sweep-1">¶</a></h4><p>Since V0(s') = 0:
-V1(s) = R(s)</p>
-<p>So:
-V1(s1) = 5
-V1(s2) = 10
-V1(s3) = 1
-V1(s4) = 2</p>
-<h4 id="Sweep-2">Sweep 2<a class="anchor-link" href="#Sweep-2">¶</a></h4><p>Compute best next-state values:</p>
+<h3 id="A)-Two-Iterations-(Sweeps)-of-Value-Iteration">A) Two Iterations (Sweeps) of Value Iteration<a class="anchor-link" href="#A)-Two-Iterations-(Sweeps)-of-Value-Iteration">¶</a></h3><p>Bellman optimality update:
+[
+V_{k+1}(s) = R(s) + \gamma \max_a V_k(s')
+]</p>
+<p><strong>Initialization:</strong>
+[
+V_0(s)=0 \quad \text{for all } s
+]</p>
+<h4 id="Iteration-/-Sweep-1">Iteration / Sweep 1<a class="anchor-link" href="#Iteration-/-Sweep-1">¶</a></h4><p>Since (V_0(s')=0) for all next states:
+[
+V_1(s)=R(s)
+]</p>
+<p>So:</p>
 <ul>
-<li><p>From s1: best next is s2 with value 10
-V2(s1) = 5 + 0.95 * 10 = 14.5</p>
-</li>
-<li><p>From s2: best next is staying in s2 (invalid moves keep you there)
-V2(s2) = 10 + 0.95 * 10 = 19.5</p>
-</li>
-<li><p>From s3: best next is s1 with value 5
-V2(s3) = 1 + 0.95 * 5 = 5.75</p>
-</li>
-<li><p>From s4: best next is s2 with value 10
-V2(s4) = 2 + 0.95 * 10 = 11.5</p>
-</li>
+<li>(V_1(s_1)=5)</li>
+<li>(V_1(s_2)=10)</li>
+<li>(V_1(s_3)=1)</li>
+<li>(V_1(s_4)=2)</li>
 </ul>
-<p>So after two sweeps:
-V2(s1) = 14.5
-V2(s2) = 19.5
-V2(s3) = 5.75
-V2(s4) = 11.5</p>
+<h4 id="Iteration-/-Sweep-2-(showing-the-max-calculation-explicitly)">Iteration / Sweep 2 (showing the max calculation explicitly)<a class="anchor-link" href="#Iteration-/-Sweep-2-(showing-the-max-calculation-explicitly)">¶</a></h4><p><strong>From (s_1)</strong> (right→(s_2), down→(s_3), up/left invalid→stay (s_1)):</p>
+<ul>
+<li>up: (s'=s_1) ⇒ (V_1(s')=V_1(s_1)=5)</li>
+<li>left: (s'=s_1) ⇒ (V_1(s')=V_1(s_1)=5)</li>
+<li>right: (s'=s_2) ⇒ (V_1(s')=V_1(s_2)=10)</li>
+<li>down: (s'=s_3) ⇒ (V_1(s')=V_1(s_3)=1)</li>
+</ul>
+<p>[
+\max_a V_1(s')=\max(5,5,10,1)=10
+]
+[
+V_2(s_1)=R(s_1)+0.95\cdot 10=5+0.95\cdot 10=14.5
+]</p>
+<p><strong>From (s_2)</strong> (left→(s_1), down→(s_4), up/right invalid→stay (s_2)):</p>
+<ul>
+<li>up: (s'=s_2) ⇒ (V_1(s')=V_1(s_2)=10)</li>
+<li>right: (s'=s_2) ⇒ (V_1(s')=V_1(s_2)=10)</li>
+<li>left: (s'=s_1) ⇒ (V_1(s')=V_1(s_1)=5)</li>
+<li>down: (s'=s_4) ⇒ (V_1(s')=V_1(s_4)=2)</li>
+</ul>
+<p>[
+\max_a V_1(s')=\max(10,10,5,2)=10
+]
+[
+V_2(s_2)=R(s_2)+0.95\cdot 10=10+0.95\cdot 10=19.5
+]</p>
+<p><strong>From (s_3)</strong> (up→(s_1), right→(s_4), left/down invalid→stay (s_3)):</p>
+<ul>
+<li>up: (s'=s_1) ⇒ (V_1(s')=V_1(s_1)=5)</li>
+<li>left: (s'=s_3) ⇒ (V_1(s')=V_1(s_3)=1)</li>
+<li>right: (s'=s_4) ⇒ (V_1(s')=V_1(s_4)=2)</li>
+<li>down: (s'=s_3) ⇒ (V_1(s')=V_1(s_3)=1)</li>
+</ul>
+<p>[
+\max_a V_1(s')=\max(5,1,2,1)=5
+]
+[
+V_2(s_3)=R(s_3)+0.95\cdot 5=1+0.95\cdot 5=5.75
+]</p>
+<p><strong>From (s_4)</strong> (up→(s_2), left→(s_3), right/down invalid→stay (s_4)):</p>
+<ul>
+<li>up: (s'=s_2) ⇒ (V_1(s')=V_1(s_2)=10)</li>
+<li>right: (s'=s_4) ⇒ (V_1(s')=V_1(s_4)=2)</li>
+<li>left: (s'=s_3) ⇒ (V_1(s')=V_1(s_3)=1)</li>
+<li>down: (s'=s_4) ⇒ (V_1(s')=V_1(s_4)=2)</li>
+</ul>
+<p>[
+\max_a V_1(s')=\max(10,2,1,2)=10
+]
+[
+V_2(s_4)=R(s_4)+0.95\cdot 10=2+0.95\cdot 10=11.5
+]</p>
+<p>So after two sweeps:</p>
+<ul>
+<li>(V_2(s_1)=14.5)</li>
+<li>(V_2(s_2)=19.5)</li>
+<li>(V_2(s_3)=5.75)</li>
+<li>(V_2(s_4)=11.5)</li>
+</ul>
 <hr/>
-<h3 id="B)-Policy-Evaluation-+-Policy-Improvement">B) Policy Evaluation + Policy Improvement<a class="anchor-link" href="#B)-Policy-Evaluation-+-Policy-Improvement">¶</a></h3><p>Initial policy π0: always move UP in every state.</p>
-<h4 id="Round-1-%E2%80%94-Policy-Evaluation">Round 1 — Policy Evaluation<a class="anchor-link" href="#Round-1-%E2%80%94-Policy-Evaluation">¶</a></h4><p>Transitions under π0:
-s1 → s1, s2 → s2, s3 → s1, s4 → s2</p>
-<p>Solve:
-V(s1) = 5 + 0.95 V(s1)  → V(s1) = 100
-V(s2) = 10 + 0.95 V(s2) → V(s2) = 200
-V(s3) = 1 + 0.95 V(s1)  → V(s3) = 96
-V(s4) = 2 + 0.95 V(s2)  → V(s4) = 192</p>
-<h4 id="Round-1-%E2%80%94-Policy-Improvement">Round 1 — Policy Improvement<a class="anchor-link" href="#Round-1-%E2%80%94-Policy-Improvement">¶</a></h4><p>Choose best action in each state:
-s1 → Right (to s2)
-s2 → Up (stay)
-s3 → Right (to s4)
-s4 → Up (to s2)</p>
-<p>So:
-π1 = { s1:R, s2:U, s3:R, s4:U }</p>
-<h4 id="Round-2-%E2%80%94-Policy-Evaluation">Round 2 — Policy Evaluation<a class="anchor-link" href="#Round-2-%E2%80%94-Policy-Evaluation">¶</a></h4><p>V(s2) = 200
-V(s1) = 5 + 0.95 * 200 = 195
-V(s4) = 2 + 0.95 * 200 = 192
-V(s3) = 1 + 0.95 * 192 = 183.4</p>
-<h4 id="Round-2-%E2%80%94-Policy-Improvement">Round 2 — Policy Improvement<a class="anchor-link" href="#Round-2-%E2%80%94-Policy-Improvement">¶</a></h4><p>At s3:
-Up → s1 gives 195
-Right → s4 gives 192
-So choose Up.</p>
-<p>Final improved policy:
-π2 = { s1:R, s2:U, s3:U, s4:U }</p>
+<h3 id="B)-Policy-Evaluation-and-Policy-Improvement-(explicitly,-starting-from-(-%5Cpi_0-))">B) Policy Evaluation and Policy Improvement (explicitly, starting from ( \pi_0 ))<a class="anchor-link" href="#B)-Policy-Evaluation-and-Policy-Improvement-(explicitly,-starting-from-(-%5Cpi_0-))">¶</a></h3><p>Initial policy ( \pi_0 ): always choose <strong>Up</strong> in every state.</p>
+<h4 id="Round-1-%E2%80%94-Policy-Evaluation-(solve-exactly)">Round 1 — Policy Evaluation (solve exactly)<a class="anchor-link" href="#Round-1-%E2%80%94-Policy-Evaluation-(solve-exactly)">¶</a></h4><p>Under ( \pi_0 ):</p>
+<ul>
+<li>(s_1) --U--&gt; (s_1) (invalid up, stays)</li>
+<li>(s_2) --U--&gt; (s_2) (invalid up, stays)</li>
+<li>(s_3) --U--&gt; (s_1)</li>
+<li>(s_4) --U--&gt; (s_2)</li>
+</ul>
+<p>Bellman expectation equations:
+[
+V(s_1)=5+0.95V(s_1)\Rightarrow V(s_1)=\frac{5}{1-0.95}=100
+]
+[
+V(s_2)=10+0.95V(s_2)\Rightarrow V(s_2)=\frac{10}{1-0.95}=200
+]
+[
+V(s_3)=1+0.95V(s_1)=1+0.95(100)=96
+]
+[
+V(s_4)=2+0.95V(s_2)=2+0.95(200)=192
+]</p>
+<p>So:</p>
+<ul>
+<li>(V(s_1)=100), (V(s_2)=200), (V(s_3)=96), (V(s_4)=192)</li>
+</ul>
+<h4 id="Round-1-%E2%80%94-Policy-Improvement-(greedy-w.r.t.-(V))">Round 1 — Policy Improvement (greedy w.r.t. (V))<a class="anchor-link" href="#Round-1-%E2%80%94-Policy-Improvement-(greedy-w.r.t.-(V))">¶</a></h4><p>Choose the action that leads to the next state with the highest value:</p>
+<ul>
+<li>At (s_1): best is right to (s_2) (200) ⇒ ( \pi_1(s_1)=R )</li>
+<li>At (s_2): staying in (s_2) via up/right gives 200 (best) ⇒ ( \pi_1(s_2)=U ) (or (R))</li>
+<li>At (s_3): best is up to (s_1) (100) ⇒ ( \pi_1(s_3)=U )</li>
+<li>At (s_4): best is up to (s_2) (200) ⇒ ( \pi_1(s_4)=U )</li>
+</ul>
+<p>Thus:
+[
+\pi_1={s_1:R,; s_2:U,; s_3:U,; s_4:U}
+]</p>
+<h4 id="Round-2-%E2%80%94-Policy-Evaluation-(solve-exactly)">Round 2 — Policy Evaluation (solve exactly)<a class="anchor-link" href="#Round-2-%E2%80%94-Policy-Evaluation-(solve-exactly)">¶</a></h4><p>Under ( \pi_1 ):</p>
+<ul>
+<li>(s_2) --U--&gt; (s_2):
+[
+V(s_2)=10+0.95V(s_2)\Rightarrow V(s_2)=200
+]</li>
+<li>(s_1) --R--&gt; (s_2):
+[
+V(s_1)=5+0.95V(s_2)=5+0.95(200)=195
+]</li>
+<li>(s_4) --U--&gt; (s_2):
+[
+V(s_4)=2+0.95V(s_2)=2+0.95(200)=192
+]</li>
+<li>(s_3) --U--&gt; (s_1):
+[
+V(s_3)=1+0.95V(s_1)=1+0.95(195)=186.25
+]</li>
+</ul>
+<h4 id="Round-2-%E2%80%94-Policy-Improvement">Round 2 — Policy Improvement<a class="anchor-link" href="#Round-2-%E2%80%94-Policy-Improvement">¶</a></h4><p>Checking greedy actions again, the policy does not change (it is stable).</p>
+<p><strong>Final improved policy:</strong>
+[
+\pi^*={s_1:R,; s_2:U,; s_3:U,; s_4:U}
+]</p>
 </div>
 </div>
 </div>
@@ -7680,7 +8017,7 @@ So choose Up.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Problem-3:-5%C3%975-Gridworld-with-Value-Iteration">Problem 3: 5×5 Gridworld with Value Iteration<a class="anchor-link" href="#Problem-3:-5%C3%975-Gridworld-with-Value-Iteration">¶</a></h3><p>In this problem, we consider a 5×5 gridworld Markov Decision Process (MDP) with deterministic transitions. States are identified by their (row, column) indices. The goal (terminal) state is at (4,4) with reward +10. Three grey (non-favourable) states, (2,2), (3,0), and (0,4), have reward −5, while all other states have reward −1. If an action would move the agent outside the grid, the agent remains in the same state.</p>
+<h2 id="Problem-3:-5%C3%975-Gridworld-with-Value-Iteration">Problem 3: 5×5 Gridworld with Value Iteration<a class="anchor-link" href="#Problem-3:-5%C3%975-Gridworld-with-Value-Iteration">¶</a></h2><p>In this problem, we consider a 5×5 gridworld Markov Decision Process (MDP) with deterministic transitions. States are identified by their (row, column) indices. The goal (terminal) state is at (4,4) with reward +10. Three grey (non-favourable) states, (2,2), (3,0), and (0,4), have reward −5, while all other states have reward −1. If an action would move the agent outside the grid, the agent remains in the same state.</p>
 <p>The discount factor is set to ( gamma = 0.95 ). We first define the reward function based on whether a state is terminal, grey, or a regular state. Then, we apply Value Iteration to compute the optimal state-value function ( V^* ) and the corresponding optimal policy ( pi^* ). The stopping criterion is based on a small tolerance ( theta ), and convergence is detected when the maximum change in values across all states becomes smaller than ( \theta ).</p>
 <p>In addition to the standard (synchronous) Value Iteration, we also implement an in-place version, where updated values are immediately reused within the same sweep. Both methods are run until convergence, and the resulting ( V^* ) and ( pi^* ) are printed as 5×5 tables.</p>
 <p>Finally, we compare the two methods in terms of the number of iterations and computation time. In this experiment, both synchronous and in-place Value Iteration converge to the same optimal value function and policy, and they require the same number of iterations due to the small size of the grid. The computational complexity per sweep is ( O(|S||A|) ), where ( |S| ) is the number of states and ( |A| ) is the number of actions.</p>
@@ -7695,7 +8032,7 @@ So choose Up.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Problem 3: 5x5 Gridworld</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># 5x5 Gridworld</span>
 <span class="c1"># ENVIRONMENT SPECIFICATION</span>
 
 <span class="c1"># Grid size 5x5 (states identified by (row, col))</span>
@@ -8001,7 +8338,7 @@ Comparison:
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Problem-4:-Off-policy-Monte-Carlo-with-Importance-Sampling">Problem 4: Off-policy Monte Carlo with Importance Sampling<a class="anchor-link" href="#Problem-4:-Off-policy-Monte-Carlo-with-Importance-Sampling">¶</a></h3><p>This section:</p>
+<h2 id="Problem-4:-Off-policy-Monte-Carlo-with-Importance-Sampling">Problem 4: Off-policy Monte Carlo with Importance Sampling<a class="anchor-link" href="#Problem-4:-Off-policy-Monte-Carlo-with-Importance-Sampling">¶</a></h2><p>This section:</p>
 <ol>
 <li>Defines the same 5×5 Gridworld as in Problem 3.</li>
 <li>Implements off-policy Monte Carlo with Weighted Importance Sampling.</li>
@@ -8020,7 +8357,7 @@ Comparison:
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Problem 4: Off-policy Monte Carlo with Importance Sampling (Weighted IS)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Off-policy Monte Carlo with Importance Sampling (Weighted IS)</span>
 <span class="c1"># ENVIRONMENT SPECIFICATION</span>
 
 <span class="c1"># Grid size: 5x5</span>
@@ -8345,7 +8682,7 @@ Comparison vs VI (same γ):
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Results-and-Discussion">Results and Discussion<a class="anchor-link" href="#Results-and-Discussion">¶</a></h3><p>Using off-policy Monte Carlo with Weighted Importance Sampling and a discount factor ( gamma = 0.95 ), the estimated value function ( V_{{MC}} ) and greedy policy ( pi_{{MC}} ) were obtained, with the goal state value close to 10 and the grey states showing lower values due to the −5 penalty. The learned policy mainly selects <strong>Right (R)</strong> and <strong>Down (D)</strong> actions, similar to the optimal policy from Value Iteration. Comparing ( V_{{MC}} ) with the optimal value function ( V^* ) gives a mean absolute error of about 0.045 and a maximum error of about 0.269, indicating that Monte Carlo provides a close but approximate solution due to sampling noise and a finite number of episodes. In terms of performance, Monte Carlo methods require many episodes and their cost grows with episode length, whereas Value Iteration is a model-based method with per-iteration complexity ( O(|S||A|) ) that converges in a small number of sweeps for this problem, highlighting the trade-off between model-free sampling methods and dynamic programming approaches.</p>
+<h2 id="Results-and-Discussion">Results and Discussion<a class="anchor-link" href="#Results-and-Discussion">¶</a></h2><p>Using off-policy Monte Carlo with Weighted Importance Sampling and a discount factor ( gamma = 0.95 ), the estimated value function ( V_{{MC}} ) and greedy policy ( pi_{{MC}} ) were obtained, with the goal state value close to 10 and the grey states showing lower values due to the −5 penalty. The learned policy mainly selects <strong>Right (R)</strong> and <strong>Down (D)</strong> actions, similar to the optimal policy from Value Iteration. Comparing ( V_{{MC}} ) with the optimal value function ( V^* ) gives a mean absolute error of about 0.045 and a maximum error of about 0.269, indicating that Monte Carlo provides a close but approximate solution due to sampling noise and a finite number of episodes. In terms of performance, Monte Carlo methods require many episodes and their cost grows with episode length, whereas Value Iteration is a model-based method with per-iteration complexity ( O(|S||A|) ) that converges in a small number of sweeps for this problem, highlighting the trade-off between model-free sampling methods and dynamic programming approaches.</p>
 </div>
 </div>
 </div>
