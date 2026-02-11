@@ -1,27 +1,49 @@
 # Reinforcement Learning Programming — Assignment 1
 
-**Name:** Albright Maduka  
-**Student ID:** 9053136  
+**Name:** Albright Maduka
+
+**Student ID:** 9053136
 
 ## Overview
 
-This repository contains a Jupyter Notebook solution for Assignment 1 (CSCN 8020 — Reinforcement Learning Programming). The notebook implements and compares dynamic programming and Monte Carlo methods on small gridworld problems, including value iteration, in-place value iteration, and off-policy Monte Carlo with weighted importance sampling.
+This repository contains the Jupyter Notebook solution for Assignment 1 (CSCN 8020). It implements and compares dynamic-programming and Monte Carlo methods on a small 5×5 gridworld, including:
 
-## Files
+- Value Iteration (synchronous and in-place)
+- Policy Evaluation / Improvement example for a 2×2 grid
+- Off-policy Monte Carlo control with Weighted Importance Sampling
 
-- [Albright_9053136_Assignment1_CSCN_8020_Reinforcement_Learning_Programming.ipynb](Albright_9053136_Assignment1_CSCN_8020_Reinforcement_Learning_Programming.ipynb)  
-  Main notebook with all problems and results.
+## Repository structure
 
-- `logs/`  
-  Directory where run logs are written (e.g., `logs/problem3.log`, `logs/problem4.log`).
+- Albright_9053136_Assignment1_CSCN_8020_Reinforcement_Learning_Programming.ipynb — Main notebook containing all problems, code, results, and discussion.
+- logs/ — Directory where run logs are written (e.g., `logs/problem3.log`, `logs/problem4.log`).
 
 ## Requirements
+- numpy
 
-- Python 3.8+  
-- numpy  
-
-Install dependencies with:
+Install the dependency with:
 
 ```bash
 python -m pip install --upgrade pip
 pip install numpy
+```
+
+## Running the notebook
+
+1. Open the notebook interactively with Jupyter Notebook or JupyterLab:
+
+```bash
+jupyter notebook Albright_9053136_Assignment1_CSCN_8020_Reinforcement_Learning_Programming.ipynb
+```
+
+2. To run the notebook end-to-end non-interactively (executes all cells and updates the notebook):
+
+```bash
+jupyter nbconvert --execute --inplace --to notebook Albright_9053136_Assignment1_CSCN_8020_Reinforcement_Learning_Programming.ipynb
+```
+
+3. Logs will be written to the `logs/` directory. Check `logs/problem3.log` and `logs/problem4.log` for detailed run information.
+
+## Notes
+
+- The notebook is self-contained and includes implementations and brief discussions of results.
+- If you want automated environment setup, I can add a `requirements.txt` .
